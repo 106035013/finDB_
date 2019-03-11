@@ -191,28 +191,276 @@ $(document).ready(function () {
 </div>
 
 
-<div id="etf4_2000_2018_d.txtfileencoding-utf-8-bom" class="section level2">
-<h2>開啟「ETF4_2000_2018_d.txt」檔案，代碼顯示為正確及fileEncoding = “UTF-8-BOM”。</h2>
+<p>開啟「ETF4_2000_2018_d.txt」檔案，header = T表示第一列為變數的名稱及fileEncoding = “UTF-8-BOM”解決亂碼問題。</p>
 <pre class="r"><code>rm(list=ls())
-etf4&lt;-read.table(&quot;ETF4_2000_2018_d.txt&quot;, header = T, fileEncoding = &quot;UTF-8-BOM&quot;)
+etf4&lt;-read.table(&quot;ETF4_2000_2018_d.txt&quot;, header = T, fileEncoding = &quot;UTF-8-BOM&quot;, stringsAsFactors = T, 
+                 colClasses = c(&quot;證券代碼&quot;=&quot;character&quot;))
 head(etf4)</code></pre>
 <pre><code>##   證券代碼       簡稱     日期 未調整收盤價.元. 當日均價.元.
-## 1       50 元大台灣50 20090105            34.20        34.30
-## 2       56 元大高股息 20090105            13.92        14.00
-## 3       50 元大台灣50 20090106            34.18        34.21
-## 4       56 元大高股息 20090106            14.04        14.02
-## 5       50 元大台灣50 20090107            34.63        34.59
-## 6       56 元大高股息 20090107            14.28        14.28</code></pre>
-<pre class="r"><code>etf4&lt;-read.csv(&quot;ETF4_2000_2018_d.csv&quot;, colClasses = c(&quot;證券代碼&quot;=&quot;character&quot;))
-str(etf4)</code></pre>
-<pre><code>## 'data.frame':    7493 obs. of  5 variables:
-##  $ 證券代碼        : chr  &quot;0050   &quot; &quot;0056   &quot; &quot;0050   &quot; &quot;0056   &quot; ...
-##  $ 簡稱            : Factor w/ 4 levels &quot;元大S&amp;P500   &quot;,..: 2 3 2 3 2 3 2 3 2 3 ...
-##  $ 日期            : int  20090105 20090105 20090106 20090106 20090107 20090107 20090108 20090108 20090109 20090109 ...
-##  $ 未調整收盤價.元.: num  34.2 13.9 34.2 14 34.6 ...
-##  $ 當日均價.元.    : num  34.3 14 34.2 14 34.6 ...</code></pre>
-<p>str(etf4) # If you get garbled text, you may try: etf4.csv&lt;-read.csv(“ETF4_2000_2018_d.csv”, fileEncoding=‘big5’, colClasses=c(‘factor’, ‘factor’, ‘factor’, ‘numeric’, ‘numeric’)) head(etf4.csv) str(etf4.csv)</p>
-</div>
+## 1     0050 元大台灣50 20090105            34.20        34.30
+## 2     0056 元大高股息 20090105            13.92        14.00
+## 3     0050 元大台灣50 20090106            34.18        34.21
+## 4     0056 元大高股息 20090106            14.04        14.02
+## 5     0050 元大台灣50 20090107            34.63        34.59
+## 6     0056 元大高股息 20090107            14.28        14.28</code></pre>
+<p>設定stringsAsFactors = T， 讓其以證券代碼、id、date、price分類，且利用fileEncoding=’big5’使文字編碼為中文。</p>
+<pre class="r"><code>etf4.csv&lt;-read.csv(&quot;ETF4_2000_2018_d.csv&quot;, stringsAsFactors = T,  fileEncoding='big5', colClasses = c(&quot;證券代碼&quot;=&quot;character&quot;,'factor', 'factor', 'factor', 'numeric', 'numeric'))</code></pre>
+<pre><code>## Warning in read.table(file = file, header = header, sep = sep, quote =
+## quote, : not all columns named in 'colClasses' exist</code></pre>
+<pre class="r"><code>head(etf4.csv)</code></pre>
+<pre><code>##   證券代碼          簡稱     日期 未調整收盤價.元. 當日均價.元.
+## 1  0050    元大台灣50    20090105            34.20        34.30
+## 2  0056    元大高股息    20090105            13.92        14.00
+## 3  0050    元大台灣50    20090106            34.18        34.21
+## 4  0056    元大高股息    20090106            14.04        14.02
+## 5  0050    元大台灣50    20090107            34.63        34.59
+## 6  0056    元大高股息    20090107            14.28        14.28</code></pre>
+<p>使用readr以提供完整的文字檔讀取功能，且locale = locale(encoding=’big5’使文字編碼為中文。</p>
+<pre class="r"><code>library(readr)
+etf4_csv&lt;-read_csv(&quot;ETF4_2000_2018_d.csv&quot;, locale = locale(encoding='big5'))</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   證券代碼 = col_character(),
+##   簡稱 = col_character(),
+##   日期 = col_double(),
+##   `未調整收盤價(元)` = col_double(),
+##   `當日均價(元)` = col_double()
+## )</code></pre>
+<pre class="r"><code>head(etf4_csv)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   證券代碼 簡稱           日期 `未調整收盤價(元)` `當日均價(元)`
+##   &lt;chr&gt;    &lt;chr&gt;         &lt;dbl&gt;              &lt;dbl&gt;          &lt;dbl&gt;
+## 1 0050     元大台灣50 20090105               34.2           34.3
+## 2 0056     元大高股息 20090105               13.9           14  
+## 3 0050     元大台灣50 20090106               34.2           34.2
+## 4 0056     元大高股息 20090106               14.0           14.0
+## 5 0050     元大台灣50 20090107               34.6           34.6
+## 6 0056     元大高股息 20090107               14.3           14.3</code></pre>
+<pre class="r"><code>str(etf4_csv)</code></pre>
+<pre><code>## Classes 'spec_tbl_df', 'tbl_df', 'tbl' and 'data.frame': 7493 obs. of  5 variables:
+##  $ 證券代碼        : chr  &quot;0050&quot; &quot;0056&quot; &quot;0050&quot; &quot;0056&quot; ...
+##  $ 簡稱            : chr  &quot;元大台灣50&quot; &quot;元大高股息&quot; &quot;元大台灣50&quot; &quot;元大高股息&quot; ...
+##  $ 日期            : num  20090105 20090105 20090106 20090106 20090107 ...
+##  $ 未調整收盤價(元): num  34.2 13.9 34.2 14 34.6 ...
+##  $ 當日均價(元)    : num  34.3 14 34.2 14 34.6 ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   證券代碼 = col_character(),
+##   ..   簡稱 = col_character(),
+##   ..   日期 = col_double(),
+##   ..   `未調整收盤價(元)` = col_double(),
+##   ..   `當日均價(元)` = col_double()
+##   .. )</code></pre>
+<p>利用readxl讀取ecvel的檔案，並且使用col_types，讓欄位的類別以向量表示。</p>
+<pre class="r"><code>library(readxl)
+etf4_xls&lt;-read_excel(&quot;ETF4_2000_2018_d.xls&quot;, 
+                     col_types =c(&quot;text&quot;, &quot;text&quot;,&quot;text&quot;, &quot;numeric&quot;,&quot;numeric&quot;))
+head(etf4_xls)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   證券代碼 簡稱       日期     `未調整收盤價(元)` `當日均價(元)`
+##   &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt;
+## 1 0050     元大台灣50 20090105               34.2           34.3
+## 2 0056     元大高股息 20090105               13.9           14  
+## 3 0050     元大台灣50 20090106               34.2           34.2
+## 4 0056     元大高股息 20090106               14.0           14.0
+## 5 0050     元大台灣50 20090107               34.6           34.6
+## 6 0056     元大高股息 20090107               14.3           14.3</code></pre>
+<p>把第一、第二、第四欄刪除，並使用magrittr、dplyr，將檔案變成以id、date、price顯示。</p>
+<pre class="r"><code>etf4.c&lt;-etf4_csv[-1, c(-2, -4)]
+library(magrittr)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>etf4.c&lt;-etf4_csv%&gt;%select(c(1,3,5))%&gt;%rename(&quot;id&quot; = &quot;證券代碼&quot;, &quot;date&quot;= &quot;日期&quot;, &quot;price&quot; = &quot;當日均價(元)&quot;)
+colnames(etf4.c)&lt;-c(&quot;id&quot;, &quot;date&quot;, &quot;price&quot;)
+head(etf4.c)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   id        date price
+##   &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;
+## 1 0050  20090105  34.3
+## 2 0056  20090105  14  
+## 3 0050  20090106  34.2
+## 4 0056  20090106  14.0
+## 5 0050  20090107  34.6
+## 6 0056  20090107  14.3</code></pre>
+<p>使用dcast讓資料變扁，以日期、id分組，“%Y%m%d”以年-月-日顯示。</p>
+<pre class="r"><code>library(reshape2)
+etf4.reorder = dcast(etf4.c, date~id)</code></pre>
+<pre><code>## Using price as value column: use value.var to override.</code></pre>
+<pre class="r"><code>etf4.reorder$date&lt;-as.Date(as.character(etf4.reorder$date), &quot;%Y%m%d&quot;) 
+dim(etf4.reorder)</code></pre>
+<pre><code>## [1] 2474    5</code></pre>
+<pre class="r"><code>head(etf4.reorder)</code></pre>
+<pre><code>##         date  0050  0056 006205 00646
+## 1 2009-01-05 34.30 14.00     NA    NA
+## 2 2009-01-06 34.21 14.02     NA    NA
+## 3 2009-01-07 34.59 14.28     NA    NA
+## 4 2009-01-08 33.21 13.86     NA    NA
+## 5 2009-01-09 32.32 13.61     NA    NA
+## 6 2009-01-10 31.91 13.55     NA    NA</code></pre>
+<p>將文字轉化成數字。</p>
+<pre class="r"><code>library(xts)</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: 'zoo'</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre><code>## 
+## Attaching package: 'xts'</code></pre>
+<pre><code>## The following objects are masked from 'package:dplyr':
+## 
+##     first, last</code></pre>
+<pre class="r"><code>etf4.xts&lt;-xts(etf4.reorder[,-1], order.by = etf4.reorder$date)
+head(etf4.xts)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2009-01-05 34.30 14.00     NA    NA
+## 2009-01-06 34.21 14.02     NA    NA
+## 2009-01-07 34.59 14.28     NA    NA
+## 2009-01-08 33.21 13.86     NA    NA
+## 2009-01-09 32.32 13.61     NA    NA
+## 2009-01-10 31.91 13.55     NA    NA</code></pre>
+<pre class="r"><code>tail(etf4.xts)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2018-12-22 74.75 24.15  25.08 22.93
+## 2018-12-24 74.67 24.16  25.25 22.72
+## 2018-12-25 73.57 23.90  24.90 22.51
+## 2018-12-26 73.87 23.83  25.16 22.13
+## 2018-12-27 74.81 23.96  25.30 22.95
+## 2018-12-28 75.21 23.92  25.24 23.16</code></pre>
+<pre class="r"><code>str(etf4.xts)</code></pre>
+<pre><code>## An 'xts' object on 2009-01-05/2018-12-28 containing:
+##   Data: num [1:2474, 1:4] 34.3 34.2 34.6 33.2 32.3 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : NULL
+##   ..$ : chr [1:4] &quot;0050&quot; &quot;0056&quot; &quot;006205&quot; &quot;00646&quot;
+##   Indexed by objects of class: [Date] TZ: UTC
+##   xts Attributes:  
+##  NULL</code></pre>
+<p>使用na.locf替代NA值。</p>
+<pre class="r"><code>etf4.xts&lt;-na.locf(etf4.xts)                
+tail(etf4.xts)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2018-12-22 74.75 24.15  25.08 22.93
+## 2018-12-24 74.67 24.16  25.25 22.72
+## 2018-12-25 73.57 23.90  24.90 22.51
+## 2018-12-26 73.87 23.83  25.16 22.13
+## 2018-12-27 74.81 23.96  25.30 22.95
+## 2018-12-28 75.21 23.92  25.24 23.16</code></pre>
+<p>利用fromLast解決下一個錯誤。</p>
+<pre class="r"><code>etf4.xts.fill&lt;-na.locf(etf4.xts, fromLast = TRUE) 
+head(etf4.xts.fill)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2009-01-05 34.30 14.00  20.33 19.54
+## 2009-01-06 34.21 14.02  20.33 19.54
+## 2009-01-07 34.59 14.28  20.33 19.54
+## 2009-01-08 33.21 13.86  20.33 19.54
+## 2009-01-09 32.32 13.61  20.33 19.54
+## 2009-01-10 31.91 13.55  20.33 19.54</code></pre>
+<p>使用na.omit去除NA值。</p>
+<pre class="r"><code>etf4.xts&lt;-na.omit(etf4.xts)
+head(etf4.xts)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2015-12-14 59.35 21.06  30.98 19.54
+## 2015-12-15 59.59 21.25  31.66 19.70
+## 2015-12-16 60.11 21.50  31.67 19.80
+## 2015-12-17 60.78 21.76  32.06 20.05
+## 2015-12-18 60.78 21.97  32.23 19.87
+## 2015-12-21 60.31 21.99  32.62 19.64</code></pre>
+<p>利用tidyr使長寬表格轉換。</p>
+<pre class="r"><code>library(tidyr)</code></pre>
+<pre><code>## 
+## Attaching package: 'tidyr'</code></pre>
+<pre><code>## The following object is masked from 'package:reshape2':
+## 
+##     smiths</code></pre>
+<pre><code>## The following object is masked from 'package:magrittr':
+## 
+##     extract</code></pre>
+<pre class="r"><code>etf4.xts1&lt;-etf4.xts[complete.cases(etf4.xts),]
+head(etf4.xts1)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2015-12-14 59.35 21.06  30.98 19.54
+## 2015-12-15 59.59 21.25  31.66 19.70
+## 2015-12-16 60.11 21.50  31.67 19.80
+## 2015-12-17 60.78 21.76  32.06 20.05
+## 2015-12-18 60.78 21.97  32.23 19.87
+## 2015-12-21 60.31 21.99  32.62 19.64</code></pre>
+<p>只顯示0050的資料。</p>
+<pre class="r"><code>lag_x &lt;- lag(etf4.xts$`0050`, 1)
+head(lag_x)</code></pre>
+<pre><code>##             0050
+## 2015-12-14    NA
+## 2015-12-15 59.35
+## 2015-12-16 59.59
+## 2015-12-17 60.11
+## 2015-12-18 60.78
+## 2015-12-21 60.78</code></pre>
+<p>利用saveRDS將資料儲存為rds檔。</p>
+<pre class="r"><code>write.csv(etf4.xts, file = &quot;myetf4.csv&quot;)
+write.zoo(etf4.xts, sep = ',', file = &quot;myetf4.csv.1&quot;)
+saveRDS(etf4.xts, file = &quot;etf4.xts.rds&quot;)
+etf4.xts2 &lt;- readRDS(&quot;etf4.xts.rds&quot;)
+head(etf4.xts2)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2015-12-14 59.35 21.06  30.98 19.54
+## 2015-12-15 59.59 21.25  31.66 19.70
+## 2015-12-16 60.11 21.50  31.67 19.80
+## 2015-12-17 60.78 21.76  32.06 20.05
+## 2015-12-18 60.78 21.97  32.23 19.87
+## 2015-12-21 60.31 21.99  32.62 19.64</code></pre>
+<p>zoo是以時間為基礎。</p>
+<pre class="r"><code>etf4.zoo &lt;- read.zoo(&quot;myetf4.csv.1&quot;, header = TRUE, index.column =1, 
+                     sep = &quot;,&quot;, format = &quot;%Y-%m-%d&quot;)
+head(etf4.zoo)</code></pre>
+<pre><code>##            X0050 X0056 X006205 X00646
+## 2015-12-14 59.35 21.06   30.98  19.54
+## 2015-12-15 59.59 21.25   31.66  19.70
+## 2015-12-16 60.11 21.50   31.67  19.80
+## 2015-12-17 60.78 21.76   32.06  20.05
+## 2015-12-18 60.78 21.97   32.23  19.87
+## 2015-12-21 60.31 21.99   32.62  19.64</code></pre>
+<pre class="r"><code>class(etf4.zoo)</code></pre>
+<pre><code>## [1] &quot;zoo&quot;</code></pre>
+<pre class="r"><code>etf4.xts3&lt;-as.xts(etf4.zoo)
+head(etf4.xts3)</code></pre>
+<pre><code>##            X0050 X0056 X006205 X00646
+## 2015-12-14 59.35 21.06   30.98  19.54
+## 2015-12-15 59.59 21.25   31.66  19.70
+## 2015-12-16 60.11 21.50   31.67  19.80
+## 2015-12-17 60.78 21.76   32.06  20.05
+## 2015-12-18 60.78 21.97   32.23  19.87
+## 2015-12-21 60.31 21.99   32.62  19.64</code></pre>
+<p>顯示2016年1月至6月的資料。</p>
+<pre class="r"><code>etf4_2016&lt;-etf4.xts['2016']
+etf4_2016_01_06 &lt;- etf4.xts[&quot;20160101/20160630&quot;]
+head(etf4_2016_01_06)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2016-01-04 59.62 21.51  31.02 19.90
+## 2016-01-05 59.30 21.42  29.94 19.78
+## 2016-01-06 58.33 21.15  29.94 19.68
+## 2016-01-07 57.30 20.91  28.41 19.50
+## 2016-01-08 57.33 20.95  28.62 19.32
+## 2016-01-11 56.47 20.64  28.47 18.92</code></pre>
+<p>只顯示2016年一個禮拜的資料。</p>
+<pre class="r"><code>lastweek &lt;- last(etf4_2016, &quot;1 week&quot;)</code></pre>
+<p>只顯示2016年最後兩天的資料。</p>
+<pre class="r"><code>last(lastweek, 2)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2016-12-29 71.35 22.97  26.96 21.55
+## 2016-12-30 71.77 23.06  27.00 21.54</code></pre>
+<p>只顯示2016最後三天的資料。</p>
+<pre class="r"><code>first(lastweek, &quot;-2 days&quot;)</code></pre>
+<pre><code>##             0050  0056 006205 00646
+## 2016-12-28 71.37 22.96  27.01 21.62
+## 2016-12-29 71.35 22.97  26.96 21.55
+## 2016-12-30 71.77 23.06  27.00 21.54</code></pre>
 
 
 
