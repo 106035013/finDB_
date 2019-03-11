@@ -1,0 +1,33 @@
+---
+title: "import R"
+author: "張瑜君"
+date: "2019年3月11日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+##開啟「ETF4_2000_2018_d.txt」檔案，代碼顯示為正確及fileEncoding = "UTF-8-BOM"。
+```{r}
+rm(list=ls())
+etf4<-read.table("ETF4_2000_2018_d.txt", header = T, fileEncoding = "UTF-8-BOM")
+head(etf4)
+```
+##設定stringsAsFactors = T, 讓其以證券代碼、id、date、price分類。
+```{r}
+etf4.csv<-read.csv("ETF4_2000_2018_d.csv", stringsAsFactors = T,  fileEncoding='big5', colClasses = c("證券代碼"="character",'id', 'date', 'price'))
+head(etf4.csv)
+```
+
+```{r}
+library(readr)
+etf4_csv<-read_csv("ETF4_2000_2018_d.csv", locale = locale(encoding='big5'))
+head(etf4_csv)
+str(etf4_csv)
+```
+
+
+
+
+
