@@ -38,6 +38,56 @@ head(etf4_csv)
 str(etf4_csv)
 # read xls file
 #install.packages("readxl")
+#----------------------------------------
+library(readr)
+tw50_2017<-read_csv("2017Q4_code.csv", locale = locale(encoding = 'big5'))
+head(tw50_2017)
+#
+install.packages("quantmod")
+library(quantmod)
+code50<-tw50_2017$code
+code50.tw <- paste(code50, ".TW", sep="")
+
+data=new.env()
+getSymbols(code50.tw, from= '2016-01-01', env= data, auto.assign = T)
+names(data)
+code50.tw<-na.omit(code50.tw)
+head(code50.tw)
+
+
+library(quantmod)
+tickers<-c("2330.TW", "2408.TW", "2454.TW", "2301.TW", "2324.TW", "2357.TW", "2382.TW", "2395.TW", "4938.TW", "2409.TW", "3008.TW", "3481.TW", "2412.TW", "3045.TW", "4904.TW", "2308.TW", "2317.TW", "2354.TW", "2474.TW")
+getSymbols(tickers, from= '2016-01-01', auto.assign = T)
+tw2330<-Ad(`2330.TW`)
+tw2408<-Ad(`2408.TW`)
+tw2454<-Ad(`2454.TW`)
+tw2301<-Ad(`2301.TW`)
+tw2324<-Ad(`2324.TW`)
+tw2357<-Ad(`2357.TW`)
+tw2382<-Ad(`2382.TW`)
+tw2395<-Ad(`2395.TW`)
+tw4938<-Ad(`4938.TW`)
+tw2409<-Ad(`2409.TW`)
+tw3008<-Ad(`3008.TW`)
+tw3481<-Ad(`3481.TW`)
+tw2412<-Ad(`2412.TW`)
+tw3045<-Ad(`3045.TW`)
+tw4904<-Ad(`4904.TW`)
+tw2308<-Ad(`2308.TW`)
+tw2317<-Ad(`2317.TW`)
+tw2354<-Ad(`2354.TW`)
+tw2474<-Ad(`2474.TW`)
+
+#------------------------------------------------
+library(readr)
+tw50<-read_csv("tw50.csv", locale = locale(encoding = 'big5'))
+head(tw50)
+
+tw50<-na.omit(tw50)
+head(tw50)
+
+
+#=================================================
 library(readxl)
 etf4_xls<-read_excel("ETF4_2000_2018_d.xls", 
                      col_types =c("text", "text","text", "numeric","numeric"))
