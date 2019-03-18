@@ -93,9 +93,6 @@ etf4_xls<-read_excel("ETF4_2000_2018_d.xls",
                      col_types =c("text", "text","text", "numeric","numeric"))
 head(etf4_xls)
 
-
-
-
 #=============================================================================
 # clean data
 etf4.c<-etf4_csv[, c(-2, -4)]
