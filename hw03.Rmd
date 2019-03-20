@@ -1,0 +1,29 @@
+---
+title: "tw50 homework3"
+author: "張瑜君"
+date: "2019年3月20日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+台灣50 107年Q4成分股名單。
+```{r}
+library(readr)
+tw50_2017<-read_csv("2017Q4_code.csv", locale = locale(encoding = 'big5'))
+head(tw50_2017)
+```
+
+#股票代碼2311及2325在TEJ、Yahoo找不到。
+台灣50 107年Q4 除息調整收盤價。
+```{r}
+library(readr)
+tw50<-read_csv("tw50.csv", locale = locale(encoding = 'big5'))
+tw50<-na.omit(tw50)
+head(tw50)
+```
+
+
+
+
