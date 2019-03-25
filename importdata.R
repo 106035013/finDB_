@@ -145,16 +145,16 @@ etf4.c<-etf4_csv[, c(-2, -4)]
 etf4.c<-etf4.c[-1,]
 colnames(etf4.c)<-c("id", "date", "price")
 # use pipe operator 
-library(magrittr)
+ifelse(!require(magrittr), install.packages('magrittr'), library(magrittr))
 #install.packages("dplyr")
-library(dplyr)
+ifelse(!require(dplyr), install.packages('dplyr'), library(dplyr))
 etf4.c<-etf4_csv%>%select(c(1,3,5))%>%rename("id" = "證券代碼", "date"= "日期", "price" = "當日均價(元)")
 etf4.c
 #etf4.c<-etf4_csv%>%select("證券代碼", "日期", "當日均價(元)")
 #-----------------------------------------------------------------                
 # use dcast to reorder dataframe by date;
 #install.packages("reshape2")
-library(reshape2)
+ifelse(!require(reshape2), install.packages('reshape2'), library(reshape2))
 etf4.reorder = dcast(etf4.c, date~id)
 dim(etf4.reorder)
 head(etf4.reorder)
@@ -166,7 +166,7 @@ str(etf4.reorder)
 # convert character into numeric 
 # convert to xts
 #install.packages("xts")
-library(xts)
+ifelse(!require(xts), install.packages('xts'), library(xts))
 etf4.xts<-xts(etf4.reorder[,-1], order.by = etf4.reorder$date)
 head(etf4.xts)
 tail(etf4.xts)
@@ -188,7 +188,7 @@ etf4.xts<-na.omit(etf4.xts)
 head(etf4.xts)
 # or complete cases
 #install.packages("tidyr")
-library(tidyr)
+ifelse(!require(tidyr), install.packages('tidyr'), library(tidyr))
 etf4.xts1<-etf4.xts[complete.cases(etf4.xts),]
 head(etf4.xts1)
 #------------------------------------------------------
@@ -230,7 +230,7 @@ first(lastweek, "-2 days")
 # Converting Daily Prices to Monthly Returns in the xts world
 #------------------------------------------------------------
 #install.packages('quantmod')
-library(quantmod)
+ifelse(!require(quantmod), install.packages('quantmod'), library(quantmod))
 etf4_monthly <- to.monthly(etf4.xts, indexAt = "lastof", OHLC=FALSE)
 head(etf4_monthly)
 # convert daily prices to weekly returns
@@ -244,8 +244,8 @@ head(etf4_weekly)
 dim(etf4_weekly)
 #
 #install.packages('PerformanceAnalytics', 'magrittr')
-library(PerformanceAnalytics)
-library(magrittr)
+ifelse(!require(PerformanceAnalytics), install.packages('PerformanceAnalytics'), library(PerformanceAnalytics))
+ifelse(!require(magrittr), install.packages('magrittr'), library(magrittr))
 etf4_returns_xts <-Return.calculate(etf4_monthly, method = "log") %>%
   na.omit()
 head(etf4_returns_xts)
@@ -261,6 +261,7 @@ plot(etf4_returns_xts, xaxt='n')
 axis(1, index(etf4_returns_xts), format(index(etf4_returns_xts), "%Y/%m"))
 # plot the scatterplot of 0050 and 00646
 # convert xts into df using fortify()
+ifelse(!require(ggplot2), install.packages('ggplot2'), library(ggplot2))
 etf4_ret.df1<-fortify(etf4_returns_xts)
 head(etf4_ret.df1)
 plot(etf4_ret.df1$`0050`, etf4_ret.df1$`00646`, pch=20,
@@ -268,12 +269,12 @@ plot(etf4_ret.df1$`0050`, etf4_ret.df1$`00646`, pch=20,
      xlab = '0050', ylab = '00646 S&P500')
 #-----------------------------------------------------------
 #install.packages("tidyverse")
-library(tidyverse)
-library(ggplot2)
+ifelse(!require(tidyverse), install.packages('tidyverse'), library(tidyverse))
+ifelse(!require(ggplot2), install.packages('ggplot2'), library(ggplot2))
 # convert xts into data frame which can be used by ggplot
 # split date index in xts into year, month and day columns 
 # using lubridate package
-library(lubridate)
+ifelse(!require(lubridate), install.packages('lubridate'), library(lubridate))
 etf4_ret.df2 <- cbind(etf4_ret.df1, month=month(index(etf4_returns_xts)), 
                       year=year(index(etf4_returns_xts)))
 #
@@ -290,19 +291,25 @@ etf4_ret
 etf4_ret.tmp<-data.frame(date = index(etf4_returns_xts), etf4_ret)
 head(etf4_ret.tmp)
 # or you can use the following code
-etf4_ret.tmp<-etf4_returns_xts %>% 
-  data.frame(date=index(.)) %>% 
-  remove_rownames() %>% 
-  gather(asset, return, -date) # turn data into long format
+#etf4_ret.tmp<-etf4_returns_xts %>% 
+  #data.frame(date=index(.)) %>% 
+  #remove_rownames() %>% 
+  #gather(asset, return, -date) # turn data into long format
 
-head(etf4_ret.tmp)
-#
+#head(etf4_ret.tmp)
+#不用做
 plot(etf4_ret.tmp$X0050, etf4_ret.tmp$X0056)
-#
+#不用做
 ggplot(etf4_ret.tmp) +
-  geom_point(mapping = aes(x = etf4_ret.tmp$`0050`, y = etf4_ret.tmp$`0056`))
+  geom_point(mapping = aes(x = etf4_ret.tmp$X0050, y = etf4_ret.tmp$X0056))
 #
 
+ifelse(!require(plotly), install.packages('plotly'), library(plotly))
+p1 = plot_ly(etf4_ret.tmp, x= ~date, y= ~X0050, name = "0050", type = "scatter", mode = "lines") %>%
+  add_trace(y=~X0056, name = '0056', mode = 'lines+markers') %>%
+  layout(xaxis = list(title = 'year'), yaxis = list(title = 'monthly returns'))
+p1
+#
 etf4_ret.df<-fortify(etf4_returns_xts, melt=TRUE)
 head(etf4_ret.df)
 #
