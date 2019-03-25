@@ -85,15 +85,6 @@ ggplot(data = etf4_ret.df2) +
 ```{r}
 ggplot(data = etf4_ret.df2) +
   geom_point(mapping = aes(x = etf4_ret.df2$`0050`, y = etf4_ret.df2$`0056`, alpha = month))
-
-library(PerformanceAnalytics)
-library(magrittr)
-etf4_ret<-coredata(etf4_monthly[-1,])/coredata(etf4_monthly[-dim(etf4_monthly)[1],])-1
-head(etf4_ret)
-class(etf4_ret)
-etf4_ret
-etf4_ret.tmp<-data.frame(date = index(etf4_returns_xts), etf4_ret)
-head(etf4_ret.tmp)
 ```
 
 
@@ -158,13 +149,4 @@ etf4_ret.df %>%
 ```
 
 
-
-```{r}
-
-library(plotly)
-p1 = plot_ly(etf4_ret.tmp, x= ~date, y= ~X0050, name = "0050", type = "scatter", mode = "lines") %>%
-  add_trace(y=~X0056, name = '0056', mode = 'lines+markers') %>%
-  layout(xaxis = list(title = 'year'), yaxis = list(title = 'monthly returns'))
-p1
-```
 
