@@ -128,6 +128,13 @@ strategy.performance.snapshoot(models, T)
 #etf4.all<-readRDS("etf4_xts_all")
 #
 #end--------------
+
+library(RDS)
+etf4.all<-readRDS("etf4_xts_all")
+head(etf4.all)
+etf4.all.1 <- etf4.all[complete.cases(etf4.all), ]
+head(etf4.all.1)
+tail(etf4.all.1)
 #----------------------------------------------------------
 # Introduction to plota.layout function
 # https://www.r-bloggers.com/introduction-to-plota-library-in-the-systematic-investor-toolbox/
