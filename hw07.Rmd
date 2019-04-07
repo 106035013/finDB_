@@ -1,0 +1,23 @@
+---
+title: "hw07"
+author: "張瑜君"
+date: "2019年4月7日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+顯示0050、0056、006205、00646的資料。
+```{r}
+etf4.all <- readRDS("etf4_xts_all")
+head(etf4.all)
+etf4.all.1 <- etf4.all[complete.cases(etf4.all), ]
+head(etf4.all.1)
+tail(etf4.all.1)
+```
+
+
+#老師不好意思，這次的作業有點難度，嘗試了好幾次還是做不出來，因此這次只能交上面那些給您，真的很不好意思。
