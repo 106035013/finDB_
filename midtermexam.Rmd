@@ -252,9 +252,9 @@ models.1<-list("SMA1216"= sma90.1216,
 
 #第一、二張圖：
 
-黑色線為SMA50 1.10，紅色線為SMA200 1.07，綠色線為SMA50_short 0.94，藍色線為BH 0050 1.27。並顯示出表格。
+黑色線為SMA1216 1.34，紅色線為SMA1216_short 0.94，綠色線為BH 1216 1.73。並顯示出表格。
 ```{r}
-strategy.performance.snapshoot(models, T)
+strategy.performance.snapshoot(models.1, T)
 ```
 
 
@@ -262,7 +262,7 @@ strategy.performance.snapshoot(models, T)
 
 顯示出Sharpe、DVR、Cagr、MaxDD四個的長條圖。
 ```{r}
-strategy.performance.snapshoot(models, control=list(comparison=T), sort.performance=T)
+strategy.performance.snapshoot(models.1, control=list(comparison=T), sort.performance=T)
 ```
 
 
@@ -270,7 +270,7 @@ strategy.performance.snapshoot(models, control=list(comparison=T), sort.performa
 
 顯示為表格。
 ```{r}
-plotbt.strategy.sidebyside(models, return.table=T)
+plotbt.strategy.sidebyside(models.1, return.table=T)
 ```
 
 
@@ -355,9 +355,9 @@ models.2<-list("SMA1301"= sma90.1301,
 
 #第一、二張圖：
 
-黑色線為SMA50 1.10，紅色線為SMA200 1.07，綠色線為SMA50_short 0.94，藍色線為BH 0050 1.27。並顯示出表格。
+黑色線為SMA1301 1.22，紅色線為SMA1301_short 0.90，綠色線為BH 1301 1.54。並顯示出表格。
 ```{r}
-strategy.performance.snapshoot(models, T)
+strategy.performance.snapshoot(models.2, T)
 ```
 
 
@@ -365,7 +365,7 @@ strategy.performance.snapshoot(models, T)
 
 顯示出Sharpe、DVR、Cagr、MaxDD四個的長條圖。
 ```{r}
-strategy.performance.snapshoot(models, control=list(comparison=T), sort.performance=T)
+strategy.performance.snapshoot(models.2, control=list(comparison=T), sort.performance=T)
 ```
 
 
@@ -373,7 +373,7 @@ strategy.performance.snapshoot(models, control=list(comparison=T), sort.performa
 
 顯示為表格。
 ```{r}
-plotbt.strategy.sidebyside(models, return.table=T)
+plotbt.strategy.sidebyside(models.2, return.table=T)
 ```
 
 

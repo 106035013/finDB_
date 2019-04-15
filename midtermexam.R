@@ -53,6 +53,8 @@ library(xts)
 data1<-new.env()
 data1$prices<-tw20.all.1$'1101'
 prices<-data1$prices
+sma1101<-SMA(prices, 90)
+head(sma1101, 91)
 
 bt.prep(data1, align='keep.all')
 names(data1)
@@ -103,6 +105,8 @@ library(xts)
 data1<-new.env()
 data1$prices<-tw20.all.1$'1216'
 prices<-data1$prices
+sma1216<-SMA(prices, 90)
+head(sma1216, 91)
 
 bt.prep(data1, align='keep.all')
 names(data1)
@@ -127,9 +131,9 @@ sma90.1216.short <- bt.run(data1, trade.summary=T)
 models.1<-list("SMA1216"= sma90.1216, 
              "SMA1216_short" = sma90.1216.short, 
              "BH 1216" = buy.hold.1216)
-strategy.performance.snapshoot(models, T)
-strategy.performance.snapshoot(models, control=list(comparison=T), sort.performance=T)
-plotbt.strategy.sidebyside(models, return.table=T)
+strategy.performance.snapshoot(models.1, T)
+strategy.performance.snapshoot(models.1, control=list(comparison=T), sort.performance=T)
+plotbt.strategy.sidebyside(models.1, return.table=T)
 
 ifelse(!require(ggplot2), install.packages('ggplot2'), library(ggplot2))
 all.1216<-merge.xts(sma90.1216$equity, 
@@ -153,6 +157,8 @@ library(xts)
 data1<-new.env()
 data1$prices<-tw20.all.1$'1301'
 prices<-data1$prices
+sma1301<-SMA(prices, 90)
+head(sma1301, 91)
 
 bt.prep(data1, align='keep.all')
 names(data1)
@@ -177,9 +183,9 @@ sma90.1301.short <- bt.run(data1, trade.summary=T)
 models.2<-list("SMA1301"= sma90.1301, 
              "SMA1301_short" = sma90.1301.short, 
              "BH 1301" = buy.hold.1301)
-strategy.performance.snapshoot(models, T)
-strategy.performance.snapshoot(models, control=list(comparison=T), sort.performance=T)
-plotbt.strategy.sidebyside(models, return.table=T)
+strategy.performance.snapshoot(models.2, T)
+strategy.performance.snapshoot(models.2, control=list(comparison=T), sort.performance=T)
+plotbt.strategy.sidebyside(models.2, return.table=T)
 
 ifelse(!require(ggplot2), install.packages('ggplot2'), library(ggplot2))
 all.1301<-merge.xts(sma90.1301$equity, 
